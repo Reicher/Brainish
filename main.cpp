@@ -2,6 +2,7 @@
 #include <iostream>
 #include <QDebug>
 #include "perceptron.h"
+#include "neuralnet.h"
 
 using namespace std;
 
@@ -26,7 +27,7 @@ void getTrainingSet(IntInputSets &inputs, vector<int> &results){
     inputs.push_back( vector<int>{ 0, 0 } );
     inputs.push_back( vector<int>{ 1, 0 } );
     inputs.push_back( vector<int>{ 0, 1 } );
-    results = vector<int>{ -1, 1, -1, -1 };
+    results = vector<int>{ -1, -1, 1, 1 };
 }
 
 int main(int argc, char *argv[])
@@ -34,20 +35,21 @@ int main(int argc, char *argv[])
     QCoreApplication a(argc, argv);
 
     int N = 2;
-    Perceptron *test = new Perceptron(N);
+    //Perceptron *test = new Perceptron(N);
+    NeuralNet *test = new NeuralNet(N);
 
     IntInputSets trainInput;
     vector<int> trainResults;
     getTrainingSet(trainInput, trainResults);
     bool trainingOK = test->train(trainInput, trainResults);
 
-    if(trainingOK){
+    if(!trainingOK){
         cout << "Training Done!" << endl;
         int result = test->run(keyboardInput(N));
         qDebug() << "Result: " << result;
     }
     else
-        cout << "Training Failed!";
+        cout << "Training Failed!" << endl;
 
     return 0;
 }

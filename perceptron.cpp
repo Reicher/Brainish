@@ -11,7 +11,7 @@ Perceptron::Perceptron(int inputs)
 
     // + 1 for bias
     for(int i = 0; i < inputs+1; ++i){
-        float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+        float r =  static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
         this->weights.push_back(r);
     }
 }
