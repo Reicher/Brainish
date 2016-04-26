@@ -1,8 +1,10 @@
 #ifndef NEURALNET_H
 #define NEURALNET_H
 
-#include <vector>
 #include "perceptron.h"
+
+#include <vector>
+
 
 using namespace std;
 
@@ -11,12 +13,16 @@ class NeuralNet
 public:
     NeuralNet(int inputs);
 
-    int run(vector<int> inputs);
+    vector<int> run(vector<int> inputs);
 
-    bool train(vector< vector<int> > inputSet, vector<int> resultSet);
+    bool train(std::vector< TestSet > trainingSet);
 
 private:
-    vector< vector<Perceptron> > nodes;
+    void updateWeights(std::vector<int> input, float error);
+
+    vector< vector<Perceptron> > layer;
+    bool trained;
+    float learningRate;
 
 };
 

@@ -1,8 +1,10 @@
 #include <QCoreApplication>
 #include <iostream>
 #include <QDebug>
+
 #include "perceptron.h"
 #include "neuralnet.h"
+#include "testset.h"
 
 using namespace std;
 
@@ -22,12 +24,12 @@ vector<int> keyboardInput(int n)
     return inputs;
 }
 
-void getTrainingSet(IntInputSets &inputs, vector<int> &results){
-    inputs.push_back( vector<int>{ 1, 1 } );
-    inputs.push_back( vector<int>{ 0, 0 } );
-    inputs.push_back( vector<int>{ 1, 0 } );
-    inputs.push_back( vector<int>{ 0, 1 } );
-    results = vector<int>{ -1, -1, 1, 1 };
+void getTrainingSet(vector< TestSet> &testSet){
+
+    testSet.push_back( TestSet( {1, 1} , { 1 } ) );
+    testSet.push_back( TestSet( {1, 0} , { 0 } ) );
+    testSet.push_back( TestSet( {0, 1} , { 0 } ) );
+    testSet.push_back( TestSet( {0, 0} , { 0 } ) );
 }
 
 int main(int argc, char *argv[])
@@ -35,15 +37,15 @@ int main(int argc, char *argv[])
     QCoreApplication a(argc, argv);
 
     int N = 2;
-    //Perceptron *test = new Perceptron(N);
-    NeuralNet *test = new NeuralNet(N);
+    Perceptron *test = new Perceptron(N);
+    //NeuralNet *test = new NeuralNet(N);
 
-    IntInputSets trainInput;
-    vector<int> trainResults;
-    getTrainingSet(trainInput, trainResults);
-    bool trainingOK = test->train(trainInput, trainResults);
+    vector<TestSet> trainingSet;
+    getTrainingSet(trainingSet);
 
-    if(!trainingOK){
+    bool trainingOK = test->train(trainingSet);
+
+    if(trainingOK){
         cout << "Training Done!" << endl;
         int result = test->run(keyboardInput(N));
         qDebug() << "Result: " << result;

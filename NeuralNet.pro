@@ -18,8 +18,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     neuralnet.cpp \
-    perceptron.cpp
+    perceptron.cpp \
+    testset.cpp \
+    input.cpp
 
 HEADERS += \
     perceptron.h \
-    neuralnet.h
+    neuralnet.h \
+    testset.h \
+    input.h

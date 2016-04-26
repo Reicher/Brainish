@@ -6,26 +6,25 @@ NeuralNet::NeuralNet(int inputs)
     qDebug() << "NeuralNet Constructor";
 
     // adding a 2 - 1 net
-    this->nodes.push_back( vector<Perceptron>{ Perceptron(inputs), Perceptron(inputs) } );
-    this->nodes.push_back( vector<Perceptron>{ Perceptron(inputs) } );
+    this->layer.push_back( vector<Perceptron>{ Perceptron(inputs), Perceptron(inputs) } );
+    this->layer.push_back( vector<Perceptron>{ Perceptron(inputs) } );
 }
-int NeuralNet::run(vector<int> nextInputs){
+vector<int> NeuralNet::run(vector<int> nextInputs){
 
     vector<int> inputs;
-    for(unsigned c = 0; c < this->nodes.size(); ++c){
+    for(unsigned c = 0; c < this->layer.size(); ++c){
         inputs = nextInputs;
         nextInputs.clear();
-        for(unsigned r = 0; r < this->nodes[c].size(); ++r){
-            nextInputs.push_back(this->nodes[c][r].run(inputs));
+        for(unsigned r = 0; r < this->layer[c].size(); ++r){
+            int output = this->layer[c][r].run(inputs);
+            nextInputs.push_back(output);
         }
     }
 
-    return nextInputs[0];
+    return nextInputs;
 }
 
-bool NeuralNet::train(vector< vector<int> > inputSet, vector<int> resultSet){
+bool NeuralNet::train(vector< TestSet > trainingSet){
 
-    // Super fancy backward propegation training
-
-    return false;
+    return this->trained;
 }

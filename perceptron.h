@@ -1,23 +1,28 @@
 #ifndef PERCEPTRON_H
 #define PERCEPTRON_H
 
-#include <vector>
+#include "testset.h"
+#include "input.h"
+
+using namespace std;
 
 class Perceptron
 {
 public:
     Perceptron(int inputs);
 
-    int run(std::vector<int> inputs);
+    float run(vector<int> input);
 
-    bool train(std::vector< std::vector<int> > inputSet, std::vector<int> resultSet);
+    bool tune(TestSet trainingSet);
+    bool train(vector<TestSet> trainingSet);
 
 private:
-    void updateWeights(std::vector<int> input, int goal);
 
-    std::vector<float> weights;
-    float learningRate;
+    Input bias;
+    vector<Input> input;
+
     bool trained;
+    float learningRate;
 };
 
 #endif // PERCEPTRON_H

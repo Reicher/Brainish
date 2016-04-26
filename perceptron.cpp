@@ -4,63 +4,68 @@
 
 
 Perceptron::Perceptron(int inputs)
+    : trained(false)
+    , learningRate(0.1)
 {
     qDebug() << "Perceptron Constructor";
-    this->trained = false;
-    this->learningRate = 0.1;
 
-    // + 1 for bias
-    for(int i = 0; i < inputs+1; ++i){
-        float r =  static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-        this->weights.push_back(r);
-    }
+    this->bias = Input(); // add bias first
+
+    for(int i = 0; i < inputs; ++i)
+        this->input.push_back(Input());
 }
 
-int Perceptron::run(std::vector<int> inputs)
+float Perceptron::run(vector<int> input)
 {
-    // add bias
-    inputs.insert(inputs.begin(), 1);
+    //qDebug() << "Input: " << input[0] << ", " << input[1];
 
-    // Weighted sum
+    // Set all input,sum all weighted inputs
     float sum = 0;
-    for(unsigned i = 0; i < inputs.size(); ++i){
-        sum += (float)inputs[i] * this->weights[i];
+    for( auto i : input) {
+        this->input[i].set((float)input[i]);
+        sum += this->input[i].getWeightedValue();
     }
     // Step Function
-    return sum > 0.5 ? 1 : -1;
-}
+    bool output = sum > 0.5 ? 1.0 : 0.0;
 
-void Perceptron::updateWeights(std::vector<int> input, int goal){
-    input.insert(input.begin(), 1); // add bias
-
-    for(unsigned w = 0; w < this->weights.size(); ++w) // update weights
-        this->weights[w] += this->learningRate
-            * goal
-            * input[w];
+    //qDebug() << "Ouput: " << output;
+    return output;
 }
 
 
-bool Perceptron::train(std::vector< std::vector<int> > inputSet, std::vector<int> resultSet)
+bool Perceptron::train(vector<TestSet> trainingSet)
 {
     int maxTries = 100;
     int tries = 0;
-    do{
-        bool fail = false;
-        for(unsigned i = 0; i < inputSet.size(); ++i){
-            std::vector<int> input = inputSet[i];
+    bool failed;
 
-            int goal = resultSet[i];
-            int result = run(input);
+    do
+    {
+        failed = false;
+        for(auto s : trainingSet)
+            if(!this->tune(s))
+                failed = true;
 
-            if(result != goal){
-                updateWeights(input, goal);
-                fail  = true;
-                }
-            }
-            this->trained = !fail;
-            ++tries;
-        }while(!this->trained && tries < maxTries);
-    qDebug() << "Tries: " << tries;
+        tries++;
+    }while (failed && tries < maxTries);
+
+    this->trained = !failed;
 
     return this->trained;
+}
+
+// Returns true if there is no more tuning to be done for this set
+bool Perceptron::tune(TestSet trainingSet)
+{
+    float result = this->run(trainingSet.input);
+    float deltaError = trainingSet.goal[0] - result;
+    bool trained = abs(deltaError) < this->learningRate;
+
+    if( !trained ){
+        bias.tune(deltaError, this->learningRate);
+        for(auto &i : this->input)
+            i.tune(deltaError, this->learningRate);
+    }
+
+    return trained;
 }
