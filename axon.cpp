@@ -1,24 +1,24 @@
-#include "input.h"
+#include "axon.h"
 
 #include <stdlib.h>
 
-Input::Input()
+Axon::Axon(int startValue)
+    : raw_input(startValue)
 {
-    this->raw_input = 0;
     this->weight = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 }
 
-void Input::set(float input)
+void Axon::set(float input)
 {
     this->raw_input = input;
 }
 
-float Input::getWeightedValue()
+float Axon::getWeightedValue()
 {
     return this->raw_input * this->weight;
 }
 
-void Input::tune(float deltaError, float learningRate)
+void Axon::tune(float deltaError, float learningRate)
 {
     this->weight += learningRate * deltaError * this->raw_input;
 }

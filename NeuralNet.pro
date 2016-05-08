@@ -20,10 +20,10 @@ SOURCES += main.cpp \
     neuralnet.cpp \
     perceptron.cpp \
     testset.cpp \
-    input.cpp
+    axon.cpp
 
 HEADERS += \
     perceptron.h \
     neuralnet.h \
     testset.h \
-    input.h
+    axon.h

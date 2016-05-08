@@ -2,27 +2,23 @@
 #define PERCEPTRON_H
 
 #include "testset.h"
-#include "input.h"
+#include "axon.h"
 
 using namespace std;
 
 class Perceptron
 {
 public:
-    Perceptron(int inputs);
+    Perceptron(vector<Axon *> inputs, unsigned outputs);
 
-    float run(vector<int> input);
-
-    bool tune(TestSet trainingSet);
-    bool train(vector<TestSet> trainingSet);
+    void Update();
+    vector<Axon*> getOutput();
 
 private:
+    Axon bias;
+    vector<Axon*> input;
+    vector<Axon*> output;
 
-    Input bias;
-    vector<Input> input;
-
-    bool trained;
-    float learningRate;
 };
 
 #endif // PERCEPTRON_H

@@ -1,10 +1,10 @@
 #ifndef INPUT_H
 #define INPUT_H
 
-class Input
+class Axon
 {
 public:
-    Input();
+    Axon(int startValue = 0);
 
     void set(float input);
     float getWeightedValue();

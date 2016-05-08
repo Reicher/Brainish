@@ -10,13 +10,13 @@ using namespace std;
 
 typedef vector< vector<int> > IntInputSets;
 
-vector<int> keyboardInput(int n)
+vector<float> keyboardInput(int n)
 {
-    vector<int> inputs;
+    vector<float> inputs;
     for(int i = 0; i < n; ++i){
         cout << "Input " << i+1 << ": ";
 
-        int buff;
+        float buff;
         cin >> buff;
         inputs.push_back(buff);
     }
@@ -37,18 +37,18 @@ int main(int argc, char *argv[])
     QCoreApplication a(argc, argv);
 
     int N = 2;
-    Perceptron *test = new Perceptron(N);
-    //NeuralNet *test = new NeuralNet(N);
+
+    NeuralNet *net = new NeuralNet(2, 0, 0, 1);
 
     vector<TestSet> trainingSet;
     getTrainingSet(trainingSet);
 
-    bool trainingOK = test->train(trainingSet);
+    bool trainingOK = true;//handler->Train(net, trainingSet, trainingSet);
 
     if(trainingOK){
         cout << "Training Done!" << endl;
-        int result = test->run(keyboardInput(N));
-        qDebug() << "Result: " << result;
+        vector<float> result = net->Run(keyboardInput(N));
+        qDebug() << "Result: " << result[0];
     }
     else
         cout << "Training Failed!" << endl;
