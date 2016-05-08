@@ -27,3 +27,6 @@ HEADERS += \
     neuralnet.h \
     testset.h \
     axon.h
+
+OTHER_FILES += \
+    README.md
